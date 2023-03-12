@@ -28,4 +28,4 @@
 - ### Install the requirements
   - #### ```pip install -r requirements.txt```
 - ### Run the ```run.py``` script
-  - ### ```python run.py```
+  - ### ```python src/run.py```

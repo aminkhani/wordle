@@ -1,3 +1,5 @@
+"""The main wordle game implementation.
+"""
 import random
 
 from utils import print_error, print_regular, print_success, print_warning
@@ -6,11 +8,13 @@ random.seed(42)
 
 
 class Wordle:
-    """Wordle Game
+    """Wordle Game.
     """
 
-    def __init__(self, file_path: str, word_len: int = 5, limit: str = 10000):
-        """Constructor
+    def __init__(self, file_path: str, word_len: int = 5, limit: str = 100000):
+        """Constructor.
+
+        Passing the dataset file_path.
         """
         self.word_len = word_len
         self.words = self.generate_word_frequency(file_path, word_len, limit)
@@ -18,11 +22,11 @@ class Wordle:
 
 
     def generate_word_frequency(self, file_path: str, word_len: int, limit: int):
-        """Generate Word Frequency
+        """Generate Word Frequency.
 
         :param file_path: text file that have many words.
         :param word_len: set the letter of words, defaults to 5.
-        :param limit: number of words to chose, defaults to 1000.
+        :param limit: number of words to chose, defaults to 10000.
         :return: list of words with {word_len} letter.
         """
 
@@ -49,23 +53,28 @@ class Wordle:
         return words
 
     def run(self):
+        """RUN THE GAME.
+
+        Make an object from Wordle class.
+        Call this method for running.
+        """
         # Random Word
         selected_word = random.choice(self.words)
         selected_word = selected_word.upper()
 
         # Start Game
         num_try = 0
-        success = True
+        success = False
 
         while True:
-            guess_word = input(f'\n{num_try + 1} >> Enter a {self.word_len} letter word (or q to exit): ')
+            guess_word = input(f"""\n{num_try + 1} >> Enter a {self.word_len} letter word (or q to exit): """)
             guess_word = guess_word.upper()
 
             if guess_word == 'Q':
                 print_warning(f"\n\t*** The word is: {selected_word} ***\n\n")
                 break
 
-            if len(guess_word) != 5:
+            if len(guess_word) != self.word_len:
                 msg = (f'\t*** Enter a {self.word_len} letter word ***\n\t*** You enter a {len(guess_word)} letter! ***')
                 print_error(msg)
                 continue
@@ -86,15 +95,14 @@ class Wordle:
             if guess_word == selected_word:
                 print_success(f"\n\t*** Congajulation ***\n")
                 print('\n')
-                success = True
                 break
 
             print('\n')
             num_try += 1
             if num_try > 5:
+                if not success:
+                    print_error(f"\n\t*** You didn't guess ***\n\t*** The word is: {selected_word} ***\n\n")
                 break
 
-            if not success:
-                print_error(f"\n\t*** You didn't guess ***\n\t*** The word is: {selected_word} ***\n\n")
 
 
